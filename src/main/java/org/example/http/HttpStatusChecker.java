@@ -15,7 +15,11 @@ public class HttpStatusChecker {
 
             connection.setRequestMethod("GET");
 
-            response = String.valueOf(connection.getResponseCode());
+            int statusCode = connection.getResponseCode();
+            if (statusCode == 404) {
+                throw new RuntimeException("Image not found (404)");
+            }
+            response = String.valueOf(statusCode);
 
             connection.disconnect();
 

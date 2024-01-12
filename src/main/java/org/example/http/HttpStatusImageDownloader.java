@@ -14,7 +14,7 @@ public class HttpStatusImageDownloader {
         String imageUrl = "https://http.cat/" + code + ".jpg";
         String destinationFile = getPath() + "img" + code + ".jpg";
 
-        if(getImage(code)){
+        if(isImageFound(code)){
             try {
                 URL url = new URL(imageUrl);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -40,7 +40,7 @@ public class HttpStatusImageDownloader {
         }
     }
 
-    private Boolean getImage(int code){
+    private Boolean isImageFound(int code){
         return !Objects.equals(httpStatusChecker.getStatusImage(code), "404");
     }
     private String getPath(){

@@ -10,40 +10,40 @@ import java.net.URL;
 
 public class HttpStatusImageDownloader {
     HttpStatusChecker httpStatusChecker = new HttpStatusChecker();
-    public void downloadStatusImage(int code){
-        String imageUrl = "https://http.cat/" + code + ".jpg";
+
+    public void downloadStatusImage(int code) {
+        String imageUrl = getImage(code);
         String destinationFile = getPath() + "img" + code + ".jpg";
 
-        if(isImageFound(code)){
-            try {
-                URL url = new URL(imageUrl);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("GET");
-                InputStream inputStream = httpURLConnection.getInputStream();
+        try {
+            URL url = new URL(imageUrl);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            InputStream inputStream = httpURLConnection.getInputStream();
 
-                FileOutputStream fileOutputStream = new FileOutputStream(destinationFile);
+            FileOutputStream fileOutputStream = new FileOutputStream(destinationFile);
 
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    fileOutputStream.write(buffer, 0, bytesRead);
-                }
-
-                inputStream.close();
-                fileOutputStream.close();
-
-                httpURLConnection.disconnect();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                fileOutputStream.write(buffer, 0, bytesRead);
             }
+
+            inputStream.close();
+            fileOutputStream.close();
+
+            httpURLConnection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private Boolean isImageFound(int code){
-        return !Objects.equals(httpStatusChecker.getStatusImage(code), "404");
+    private String getImage(int code) {
+        return httpStatusChecker.getStatusImage(code);
     }
-    private String getPath(){
+
+    private String getPath() {
         return HttpStatusImageDownloader.class.getProtectionDomain().
                 getCodeSource().
                 getLocation().
